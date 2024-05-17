@@ -28,7 +28,7 @@ func (repo *UserRepositoryImpl) SaveUser(user domain.User) (domain.User, error) 
 func (repo *UserRepositoryImpl) GetUserID(id int) (domain.User, error) {
 	var userData domain.User
 
-	err := repo.db.First(&userData, "user_id = ?", id).Error
+	err := repo.db.Joins("Address").Find(&userData, "user_id = ?", id).Error
 
 	if err != nil {
 		return domain.User{}, errors.New("user tidak ditemukan")
@@ -40,7 +40,7 @@ func (repo *UserRepositoryImpl) GetUserID(id int) (domain.User, error) {
 func (repo *UserRepositoryImpl) GetUsers() ([]domain.User, error) {
 	var usersData []domain.User
 
-	err := repo.db.Find(&usersData).Error
+	err := repo.db.Joins("Address").Find(&usersData).Error
 
 	if err != nil {
 		return []domain.User{}, errors.New("users tidak ditemukan")

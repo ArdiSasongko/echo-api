@@ -68,13 +68,7 @@ func (service *UserServiceImpl) GetUser(id int) (entity.UserEntity, error) {
 		return entity.UserEntity{}, err
 	}
 
-	dataUser := entity.ToUserEntity(
-		data.UserID,
-		data.Name,
-		data.Email,
-	)
-
-	return dataUser, nil
+	return entity.ToUserEntity(data), nil
 }
 
 func (service *UserServiceImpl) GetUsers() ([]entity.UserEntity, error) {
