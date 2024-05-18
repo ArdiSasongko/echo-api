@@ -11,7 +11,7 @@ type TokenUseCase interface {
 	VerifyJWT(tokenString string) (*jwt.Token, error)
 }
 
-type tokenUseCase struct{}
+type TokenUseCaseImpl struct{}
 
 type CustomClaims struct {
 	UserID string `json:"user_id"`
@@ -20,11 +20,11 @@ type CustomClaims struct {
 	jwt.RegisteredClaims
 }
 
-func NewTokenUseCase() *tokenUseCase {
-	return &tokenUseCase{}
+func NewTokenUseCase() *TokenUseCaseImpl {
+	return &TokenUseCaseImpl{}
 }
 
-func (t *tokenUseCase) GenerateAccessToken(claims CustomClaims) (string, error) {
+func (t *TokenUseCaseImpl) GenerateAccessToken(claims CustomClaims) (string, error) {
 	plainToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	encodeToken, err := plainToken.SignedString([]byte(os.Getenv("SECRET_KEY")))
 
@@ -35,7 +35,7 @@ func (t *tokenUseCase) GenerateAccessToken(claims CustomClaims) (string, error) 
 	return encodeToken, nil
 }
 
-func (t *tokenUseCase) VerifyJWT(tokenString string) (*jwt.Token, error) {
+func (t *TokenUseCaseImpl) VerifyJWT(tokenString string) (*jwt.Token, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(os.Getenv("SECRET_KEY")), nil
 	})
